@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+:root {
+  --forest: #1E3A1E;
+  --forest-mid: #2C5F2D;
+  --moss: #4A7C59;
+  --sage: #7BAE7F;
+  --lime: #A8D5A2;
+  --cream: #F4F7F0;
+  --parchment: #EEF3E6;
+  --bark: #3D2B1F;
+  --carbon: #1A1A1A;
+  --muted: #6B7A6E;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--cream);
+  color: var(--carbon);
+  min-height: 100vh;
+}
+
+h1, h2, h3, .serif { font-family: 'DM Serif Display', serif; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+@keyframes eco-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(74, 124, 89, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(74, 124, 89, 0); }
+}
+.eco-pulse { animation: eco-pulse 2s ease-in-out infinite; }
+
+@keyframes nudge-in {
+  from { transform: translateY(-12px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.nudge-in { animation: nudge-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+
+@keyframes reward-pop {
+  0% { transform: scale(0.8); opacity: 0; }
+  70% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.reward-pop { animation: reward-pop 0.5s ease forwards; }
+
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.count-up { animation: count-up 0.6s ease forwards; }
+
+html { scroll-behavior: smooth; }
+
+.tooltip { position: relative; }
+.tooltip:hover .tooltip-text { opacity: 1; pointer-events: auto; }
+.tooltip-text {
+  opacity: 0; pointer-events: none; transition: opacity 0.2s;
+  position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%);
+  background: var(--forest); color: white; padding: 6px 10px;
+  border-radius: 6px; font-size: 12px; white-space: nowrap; z-index: 50;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

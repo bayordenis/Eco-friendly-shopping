@@ -70,7 +70,7 @@ export default function ShopPage() {
           {state.greenPoints === 0 && (
             <div
               className="rounded-2xl p-4"
-              style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(168,213,162,0.3)" }}
+              style={{ background: "rgba(255,255,255,0.1)", border: "2px solid rgba(168,213,162,0.3)" }}
             >
               <p className="font-semibold mb-1 text-sm">Start earning green points</p>
               <p style={{ color: "rgba(255,255,255,0.6)", fontSize: 13 }}>
@@ -93,7 +93,7 @@ export default function ShopPage() {
             placeholder="Search eco products…"
             className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm outline-none"
             style={{
-              border: "1.5px solid #E8F5E9",
+              border: "2px solid #E8F5E9",
               background: "white",
               color: "#1A1A1A",
             }}
@@ -108,7 +108,7 @@ export default function ShopPage() {
           value={sort}
           onChange={e => setSort(e.target.value)}
           className="px-4 py-2.5 rounded-xl text-sm outline-none cursor-pointer"
-          style={{ border: "1.5px solid #E8F5E9", background: "white", color: "#1A1A1A", minWidth: 210 }}
+          style={{ border: "2px solid #E8F5E9", background: "white", color: "#1A1A1A", minWidth: 210 }}
           aria-label="Sort products"
         >
           {SORT_OPTIONS.map(o => (
@@ -120,7 +120,7 @@ export default function ShopPage() {
           onClick={() => setShowFilters(f => !f)}
           className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium"
           style={{
-            border: "1.5px solid #E8F5E9",
+            border: "2px solid #E8F5E9",
             background: showFilters ? "#E8F5E9" : "white",
             color: "#2C5F2D",
           }}
@@ -142,7 +142,7 @@ export default function ShopPage() {
               style={{
                 background: category === cat ? "#2C5F2D" : "#E8F5E9",
                 color: category === cat ? "white" : "#2C5F2D",
-                border: `1.5px solid ${category === cat ? "#2C5F2D" : "#A8D5A2"}`,
+                border: `2px solid ${category === cat ? "#2C5F2D" : "#A8D5A2"}`,
               }}
               aria-pressed={category === cat}
             >

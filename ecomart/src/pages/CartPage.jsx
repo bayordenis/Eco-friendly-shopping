@@ -92,7 +92,7 @@ export default function CartPage() {
                   {/* Qty control */}
                   <div
                     className="flex items-center rounded-lg overflow-hidden"
-                    style={{ border: "1.5px solid #E8F5E9" }}
+                    style={{ border: "2px solid #E8F5E9" }}
                   >
                     <button
                       onClick={() => dispatch({ type: "UPDATE_QTY", id: item.id, qty: item.qty - 1 })}
@@ -139,7 +139,7 @@ export default function CartPage() {
           {/* PERSUASIVE FEATURE: Eco Shipping Selection (default eco) */}
           <div
             className="rounded-2xl overflow-hidden"
-            style={{ border: "1px solid #E8F5E9", background: "white" }}
+            style={{ border: "2px solid #E8F5E9", background: "white" }}
           >
             <div
               className="flex items-center gap-2 px-5 py-3"

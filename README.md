@@ -59,9 +59,13 @@ This project was developed as a **final-year Bachelor of Science in Computer Sci
 *Design and Evaluation of a Persuasive E-Commerce Interface for Promoting Eco-Friendly Consumer Choices*
 
 **Student:** Denis Bagresolzu Bayor
+
 **Student ID:** 11252482
+
 **Supervisor:** Prof. Isaac Wiafe
+
 **Department:** Department of Computer Science, University of Ghana
+
 
 ## License
 

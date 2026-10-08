@@ -4,6 +4,7 @@ import { CheckCircle, Leaf, Wind, Star, AlertCircle } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import { RewardPopup } from "../components/GreenRewards";
 import { SustainabilityScore } from "../components/SustainabilityScore";
+import { IS_CONTROL } from "../mode";
 
 function Field({ label, type = "text", placeholder, required, id }) {
   const [err, setErr] = useState("");
@@ -63,7 +64,7 @@ export default function CheckoutPage() {
 
   function handleRewardDismiss() {
     dispatch({ type: "CLEAR_REWARD" });
-    navigate("/dashboard");
+    navigate(IS_CONTROL ? "/" : "/dashboard");
   }
 
   if (cart.length === 0 && !recentReward) {
@@ -75,7 +76,7 @@ export default function CheckoutPage() {
     <div className="max-w-6xl mx-auto px-4 py-8">
       <h1 className="serif text-3xl mb-2" style={{ color: "#1E3A1E" }}>Checkout</h1>
       <p className="text-sm mb-8" style={{ color: "#6B7A6E" }}>
-        Review your order and its environmental impact before completing.
+        {IS_CONTROL ? "Review your order before completing." : "Review your order and its environmental impact before completing."}
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
@@ -110,7 +111,13 @@ export default function CheckoutPage() {
             </div>
 
             {/* Selected shipping recap */}
-            <div
+            {IS_CONTROL ? (
+              <div className="rounded-2xl p-4" style={{ background: "white", border: "1px solid #E8F5E9" }}>
+                <p className="text-sm font-semibold" style={{ color: "#1E3A1E" }}>{selectedShipping.label}</p>
+                <p className="text-xs mt-0.5" style={{ color: "#6B7A6E" }}>{selectedShipping.days} days · {selectedShipping.price === 0 ? "Free" : `GH₵ ${selectedShipping.price.toFixed(2)}`}</p>
+                <button type="button" onClick={() => navigate("/cart")} className="text-xs font-semibold underline mt-1" style={{ color: "#2C5F2D", background: "none", border: "none", cursor: "pointer", padding: 0 }}>Change delivery method</button>
+              </div>
+            ) : <div
               className="rounded-2xl p-4 flex items-center gap-3"
               style={{
                 background: selectedShipping.isEco ? "#E8F5E9" : "#FFF3E0",
@@ -137,7 +144,7 @@ export default function CheckoutPage() {
                   Switch to eco
                 </button>
               )}
-            </div>
+            </div>}
 
             {formError && (
               <div
@@ -169,7 +176,7 @@ export default function CheckoutPage() {
         {/* Right: Order review + environmental impact summary */}
         <div className="space-y-5">
           {/* PERSUASIVE FEATURE: Environmental Impact Summary */}
-          <div
+          {!IS_CONTROL && <div
             className="rounded-2xl overflow-hidden"
             style={{ border: "2px solid #2C5F2D" }}
           >
@@ -249,7 +256,7 @@ export default function CheckoutPage() {
                 </div>
               )}
             </div>
-          </div>
+          </div>}
 
           {/* Order items list */}
           <div
@@ -297,7 +304,17 @@ export default function CheckoutPage() {
       </div>
 
       {/* Reward popup */}
-      {recentReward && (
+      {recentReward && IS_CONTROL && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: "rgba(0,0,0,0.45)" }}>
+          <div className="rounded-2xl p-8 text-center max-w-sm w-full mx-4" style={{ background: "white" }}>
+            <CheckCircle size={44} style={{ color: "#2C5F2D", margin: "0 auto 12px" }} />
+            <p className="serif text-2xl mb-1" style={{ color: "#1E3A1E" }}>Order placed</p>
+            <p className="text-sm mb-5" style={{ color: "#6B7A6E" }}>Thank you. Your simulated order has been received.</p>
+            <button onClick={handleRewardDismiss} className="w-full py-3 rounded-xl font-semibold text-white" style={{ background: "#1E3A1E" }}>Continue shopping</button>
+          </div>
+        </div>
+      )}
+      {recentReward && !IS_CONTROL && (
         <RewardPopup reward={recentReward} onDismiss={handleRewardDismiss} />
       )}
     </div>

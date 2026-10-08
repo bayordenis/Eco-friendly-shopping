@@ -4,6 +4,7 @@ import { ShoppingCart, Star } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import { SustainabilityScore, EcoBadge } from "./SustainabilityScore";
 import { CarbonBadge } from "./CarbonTracker";
+import { IS_CONTROL } from "../mode";
 
 export default function ProductCard({ product }) {
   const { dispatch } = useApp();
@@ -41,13 +42,13 @@ export default function ProductCard({ product }) {
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         {/* Sustainability score overlay */}
-        <div className="absolute top-3 left-3">
+        {!IS_CONTROL && <><div className="absolute top-3 left-3">
           <SustainabilityScore score={product.sustainabilityScore} size="sm" />
         </div>
         {/* Carbon badge */}
         <div className="absolute bottom-3 right-3">
           <CarbonBadge carbonKg={product.carbonKg} size="sm" />
-        </div>
+        </div></>}
       </div>
 
       {/* Content */}
@@ -80,11 +81,11 @@ export default function ProductCard({ product }) {
         </div>
 
         {/* Badges */}
-        <div className="flex flex-wrap gap-1">
+        {!IS_CONTROL && <div className="flex flex-wrap gap-1">
           {product.badges.slice(0, 2).map(b => (
             <EcoBadge key={b} label={b} />
           ))}
-        </div>
+        </div>}
 
         {/* Price + Add button */}
         <div className="flex items-center justify-between pt-1">

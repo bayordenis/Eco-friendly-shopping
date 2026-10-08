@@ -1,11 +1,12 @@
 import { createContext, useContext, useReducer, useEffect } from "react";
 import { shippingOptions } from "../data/products";
+import { IS_CONTROL } from "../mode";
 
 const AppContext = createContext(null);
 
 const initialState = {
   cart: [],
-  selectedShipping: shippingOptions[0], // eco by default
+  selectedShipping: IS_CONTROL ? shippingOptions[1] : shippingOptions[0], // control: standard default; persuasive: eco default
   greenPoints: 0,
   totalCarbonSaved: 0,
   totalPurchases: 0,
@@ -36,6 +37,7 @@ function reducer(state, action) {
     case "CLEAR_CART":
       return { ...state, cart: [] };
     case "COMPLETE_ORDER": {
+      if (IS_CONTROL) return { ...state, cart: [], totalPurchases: state.totalPurchases + 1, recentReward: { control: true } };
       // Award points based on sustainability scores
       const ecoBonus = state.selectedShipping.isEco ? 50 : 0;
       const productPoints = state.cart.reduce((acc, item) => {
@@ -85,6 +87,7 @@ function reducer(state, action) {
 export function AppProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState, (init) => {
     try {
+      if (IS_CONTROL) return init;
       const saved = localStorage.getItem("ecomart_state");
       if (saved) {
         const parsed = JSON.parse(saved);

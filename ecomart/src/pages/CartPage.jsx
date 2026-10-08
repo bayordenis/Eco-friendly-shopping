@@ -5,6 +5,7 @@ import { shippingOptions } from "../data/products";
 import { CartCarbonSummary } from "../components/CarbonTracker";
 import { CartSocialNudge } from "../components/SocialProof";
 import { SustainabilityScore } from "../components/SustainabilityScore";
+import { IS_CONTROL } from "../mode";
 
 export default function CartPage() {
   const { state, dispatch, cartTotal, cartCarbon } = useApp();
@@ -24,7 +25,7 @@ export default function CartPage() {
           Your cart is empty
         </h2>
         <p className="mb-6" style={{ color: "#6B7A6E" }}>
-          Start adding eco-friendly products to your cart.
+          {IS_CONTROL ? "Start adding products to your cart." : "Start adding eco-friendly products to your cart."}
         </p>
         <Link
           to="/"
@@ -52,7 +53,7 @@ export default function CartPage() {
         {/* Cart items */}
         <div className="lg:col-span-2 space-y-4">
           {/* Social proof nudge */}
-          <CartSocialNudge count={31} />
+          {!IS_CONTROL && <CartSocialNudge count={31} />}
 
           {cart.map(item => (
             <div
@@ -85,7 +86,7 @@ export default function CartPage() {
                       {item.category}
                     </p>
                   </div>
-                  <SustainabilityScore score={item.sustainabilityScore} size="sm" />
+                  {!IS_CONTROL && <SustainabilityScore score={item.sustainabilityScore} size="sm" />}
                 </div>
 
                 <div className="flex items-center justify-between mt-3">
@@ -145,16 +146,16 @@ export default function CartPage() {
               className="flex items-center gap-2 px-5 py-3"
               style={{ background: "#F4F7F0", borderBottom: "1px solid #E8F5E9" }}
             >
-              <Leaf size={16} style={{ color: "#2C5F2D" }} />
+              {!IS_CONTROL && <Leaf size={16} style={{ color: "#2C5F2D" }} />}
               <span className="font-semibold text-sm" style={{ color: "#1E3A1E" }}>
                 Delivery Method
               </span>
-              <span
+              {!IS_CONTROL && <span
                 className="text-xs font-semibold px-2 py-0.5 rounded-full ml-auto"
                 style={{ background: "#A8D5A2", color: "#1E3A1E" }}
               >
                 Eco default pre-selected
-              </span>
+              </span>}
             </div>
             <div className="divide-y" style={{ borderColor: "#F4F7F0" }}>
               {shippingOptions.map(opt => (
@@ -163,7 +164,7 @@ export default function CartPage() {
                   className="flex items-start gap-3 px-5 py-4 cursor-pointer transition-colors"
                   style={{
                     background: selectedShipping.id === opt.id
-                      ? opt.isEco ? "#E8F5E9" : "white"
+                      ? (opt.isEco && !IS_CONTROL) ? "#E8F5E9" : (IS_CONTROL ? "#F4F7F0" : "white")
                       : "white",
                   }}
                 >
@@ -181,7 +182,7 @@ export default function CartPage() {
                       <span className="font-semibold text-sm" style={{ color: "#1A1A1A" }}>
                         {opt.label}
                       </span>
-                      {opt.isEco && (
+                      {opt.isEco && !IS_CONTROL && (
                         <span
                           className="flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full eco-pulse"
                           style={{ background: "#2C5F2D", color: "white" }}
@@ -194,16 +195,16 @@ export default function CartPage() {
                       </span>
                     </div>
                     <p className="text-xs mt-0.5" style={{ color: "#6B7A6E" }}>
-                      {opt.description} · {opt.days} days
+                      {IS_CONTROL ? (opt.isEco ? "Bicycle courier & electric van" : opt.description) : opt.description} · {opt.days} days
                     </p>
-                    <p className="text-xs mt-0.5 mono" style={{ color: opt.isEco ? "#4A7C59" : "#E65100" }}>
+                    {!IS_CONTROL && <p className="text-xs mt-0.5 mono" style={{ color: opt.isEco ? "#4A7C59" : "#E65100" }}>
                       {opt.carbonKg} kg CO₂
                       {!opt.isEco && (
                         <span style={{ color: "#E65100" }}>
                           {" "}(+{(opt.carbonKg - shippingOptions[0].carbonKg).toFixed(2)} kg vs eco)
                         </span>
                       )}
-                    </p>
+                    </p>}
                   </div>
                 </label>
               ))}
@@ -214,10 +215,10 @@ export default function CartPage() {
         {/* Order summary sidebar */}
         <div className="space-y-4">
           {/* Carbon summary */}
-          <CartCarbonSummary cartCarbon={cartCarbon} shipping={selectedShipping} />
+          {!IS_CONTROL && <CartCarbonSummary cartCarbon={cartCarbon} shipping={selectedShipping} />}
 
           {/* Points preview */}
-          <div
+          {!IS_CONTROL && <div
             className="rounded-2xl p-4 space-y-2"
             style={{ background: "#1E3A1E", color: "white" }}
           >
@@ -243,7 +244,7 @@ export default function CartPage() {
               <span>Total to earn</span>
               <span className="mono text-xl" style={{ color: "#A8D5A2" }}>+{pointsPreview}</span>
             </div>
-          </div>
+          </div>}
 
           {/* Price summary */}
           <div
@@ -259,7 +260,7 @@ export default function CartPage() {
               <div className="flex justify-between">
                 <span style={{ color: "#6B7A6E" }}>Delivery</span>
                 <span className="mono" style={{ color: selectedShipping.price === 0 ? "#2C5F2D" : "#1A1A1A" }}>
-                  {selectedShipping.price === 0 ? "Free 🌿" : `GH₵ ${selectedShipping.price.toFixed(2)}`}
+                  {selectedShipping.price === 0 ? (IS_CONTROL ? "Free" : "Free 🌿") : `GH₵ ${selectedShipping.price.toFixed(2)}`}
                 </span>
               </div>
             </div>

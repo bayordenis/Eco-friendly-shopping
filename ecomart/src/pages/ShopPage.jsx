@@ -5,8 +5,15 @@ import ProductCard from "../components/ProductCard";
 import { TotalCarbonSavedWidget } from "../components/CarbonTracker";
 import { GreenPointsBar } from "../components/GreenRewards";
 import { useApp } from "../context/AppContext";
+import { IS_CONTROL } from "../mode";
 
-const SORT_OPTIONS = [
+const CONTROL_SORT = [
+  { value: "featured", label: "Featured" },
+  { value: "price_asc", label: "Price (Low → High)" },
+  { value: "price_desc", label: "Price (High → Low)" },
+  { value: "rating", label: "Top Rated" },
+];
+const SORT_OPTIONS_P = [
   { value: "eco", label: "Eco Score (High → Low)" },
   { value: "price_asc", label: "Price (Low → High)" },
   { value: "price_desc", label: "Price (High → Low)" },
@@ -15,10 +22,11 @@ const SORT_OPTIONS = [
 ];
 
 export default function ShopPage() {
+  const SORT_OPTIONS = IS_CONTROL ? CONTROL_SORT : SORT_OPTIONS_P;
   const { state } = useApp();
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
-  const [sort, setSort] = useState("eco");
+  const [sort, setSort] = useState(IS_CONTROL ? "featured" : "eco");
   const [showFilters, setShowFilters] = useState(false);
 
   const filtered = useMemo(() => {
@@ -35,6 +43,7 @@ export default function ShopPage() {
       case "price_desc": list.sort((a, b) => b.price - a.price); break;
       case "carbon": list.sort((a, b) => a.carbonKg - b.carbonKg); break;
       case "rating": list.sort((a, b) => b.rating - a.rating); break;
+      case "featured": list.sort((a, b) => a.id - b.id); break;
     }
     return list;
   }, [search, category, sort]);
@@ -51,16 +60,16 @@ export default function ShopPage() {
       >
         <div className="max-w-lg">
           <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "#A8D5A2" }}>
-            Eco-Conscious Shopping
+            {IS_CONTROL ? "Online Store" : "Eco-Conscious Shopping"}
           </p>
           <h1 className="serif text-4xl sm:text-5xl mb-3" style={{ lineHeight: 1.1 }}>
-            Every purchase,<br />a better planet.
+            {IS_CONTROL ? <>Everyday essentials,<br />delivered.</> : <>Every purchase,<br />a better planet.</>}
           </h1>
           <p style={{ color: "rgba(255,255,255,0.75)", fontSize: 15 }}>
-            Every product is scored for sustainability. Choose wisely — earn green points, save carbon, make a difference.
+            {IS_CONTROL ? "Browse our range of home, kitchen, outdoor and personal-care products." : "Every product is scored for sustainability. Choose wisely — earn green points, save carbon, make a difference."}
           </p>
         </div>
-        <div className="flex flex-col gap-3 w-full sm:w-72">
+        {!IS_CONTROL && <div className="flex flex-col gap-3 w-full sm:w-72">
           {state.totalCarbonSaved > 0 && (
             <TotalCarbonSavedWidget totalKg={state.totalCarbonSaved} />
           )}
@@ -78,7 +87,7 @@ export default function ShopPage() {
               </p>
             </div>
           )}
-        </div>
+        </div>}
       </div>
 
       {/* Filters */}
@@ -90,7 +99,7 @@ export default function ShopPage() {
             type="search"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Search eco products…"
+            placeholder={IS_CONTROL ? "Search products…" : "Search eco products…"}
             className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm outline-none"
             style={{
               border: "2px solid #E8F5E9",
@@ -155,10 +164,10 @@ export default function ShopPage() {
       {/* Results count */}
       <div className="flex items-center justify-between mb-4">
         <p className="text-sm" style={{ color: "#6B7A6E" }}>
-          <strong style={{ color: "#1A1A1A" }}>{filtered.length}</strong> eco products
+          <strong style={{ color: "#1A1A1A" }}>{filtered.length}</strong> {IS_CONTROL ? "products" : "eco products"}
           {category !== "All" && <> in <strong style={{ color: "#2C5F2D" }}>{category}</strong></>}
         </p>
-        {filtered.length > 0 && (
+        {!IS_CONTROL && filtered.length > 0 && (
           <div className="flex items-center gap-1.5 text-xs" style={{ color: "#4A7C59" }}>
             <Leaf size={13} />
             Sorted by eco score by default

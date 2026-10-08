@@ -6,6 +6,7 @@ import { useApp } from "../context/AppContext";
 import { SustainabilityScore, EcoBadge } from "../components/SustainabilityScore";
 import { CarbonBadge } from "../components/CarbonTracker";
 import { SocialProofNudge } from "../components/SocialProof";
+import { IS_CONTROL } from "../mode";
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -70,12 +71,12 @@ export default function ProductDetailPage() {
               className="w-full h-full object-cover"
             />
             {/* Floating score */}
-            <div
+            {!IS_CONTROL && <div
               className="absolute top-4 left-4 rounded-2xl p-3"
               style={{ background: "rgba(255,255,255,0.95)", boxShadow: "0 4px 16px rgba(0,0,0,0.12)" }}
             >
               <SustainabilityScore score={product.sustainabilityScore} size="lg" />
-            </div>
+            </div>}
           </div>
 
           {/* Material breakdown card */}
@@ -84,10 +85,10 @@ export default function ProductDetailPage() {
             style={{ background: "white", border: "1px solid #E8F5E9" }}
           >
             <p className="font-semibold text-sm" style={{ color: "#1E3A1E" }}>
-              🌿 What it's made of
+              {IS_CONTROL ? "Materials" : "🌿 What it's made of"}
             </p>
             <p className="text-sm" style={{ color: "#3D2B1F" }}>{product.materials}</p>
-            <div className="flex flex-wrap gap-2 pt-1">
+            {!IS_CONTROL && <div className="flex flex-wrap gap-2 pt-1">
               {product.certifications.map(c => (
                 <span
                   key={c}
@@ -97,7 +98,7 @@ export default function ProductDetailPage() {
                   <CheckCircle size={11} /> {c}
                 </span>
               ))}
-            </div>
+            </div>}
           </div>
         </div>
 
@@ -134,7 +135,7 @@ export default function ProductDetailPage() {
             <span className="serif text-4xl font-bold" style={{ color: "#1E3A1E" }}>
               GH₵ {product.price.toFixed(2)}
             </span>
-            <CarbonBadge carbonKg={product.carbonKg} />
+            {!IS_CONTROL && <CarbonBadge carbonKg={product.carbonKg} />}
           </div>
 
           {/* Description */}
@@ -143,15 +144,15 @@ export default function ProductDetailPage() {
           </p>
 
           {/* Eco badges */}
-          <div className="flex flex-wrap gap-2">
+          {!IS_CONTROL && <div className="flex flex-wrap gap-2">
             {product.badges.map(b => <EcoBadge key={b} label={b} />)}
-          </div>
+          </div>}
 
           {/* PERSUASIVE FEATURE 1: Social Proof Nudge */}
-          <SocialProofNudge product={product} visible={nudgeVisible} />
+          {!IS_CONTROL && <SocialProofNudge product={product} visible={nudgeVisible} />}
 
           {/* PERSUASIVE FEATURE 2: Green points preview */}
-          <div
+          {!IS_CONTROL && <div
             className="flex items-center gap-3 rounded-xl px-4 py-3"
             style={{ background: "#F4F7F0", border: "1px solid #E8F5E9" }}
           >
@@ -171,7 +172,7 @@ export default function ProductDetailPage() {
                 Higher eco score = more points
               </p>
             </div>
-          </div>
+          </div>}
 
           {/* Add to cart */}
           <div className="flex gap-3">
@@ -193,7 +194,7 @@ export default function ProductDetailPage() {
           </div>
 
           {/* PERSUASIVE FEATURE 3: Eco shipping teaser */}
-          <div
+          {!IS_CONTROL && <div
             className="flex items-start gap-3 rounded-xl px-4 py-3"
             style={{ background: "#E8F5E9", border: "1px solid #A8D5A2" }}
           >
@@ -206,7 +207,7 @@ export default function ProductDetailPage() {
                 Carbon-neutral shipping pre-selected at checkout — earn +50 bonus points!
               </p>
             </div>
-          </div>
+          </div>}
         </div>
       </div>
 
@@ -214,7 +215,7 @@ export default function ProductDetailPage() {
       {relatedProducts.length > 0 && (
         <div className="mt-14">
           <h2 className="serif text-2xl mb-6" style={{ color: "#1E3A1E" }}>
-            More eco-friendly picks
+            {IS_CONTROL ? "You may also like" : "More eco-friendly picks"}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {relatedProducts.map(p => (
@@ -236,7 +237,7 @@ export default function ProductDetailPage() {
                 <div className="p-3">
                   <p className="font-semibold text-sm" style={{ color: "#1A1A1A" }}>{p.name}</p>
                   <p className="text-xs mt-1" style={{ color: "#6B7A6E" }}>
-                    GH₵ {p.price.toFixed(2)} · Score: {p.sustainabilityScore}
+                    GH₵ {p.price.toFixed(2)}{!IS_CONTROL && <> · Score: {p.sustainabilityScore}</>}
                   </p>
                 </div>
               </Link>

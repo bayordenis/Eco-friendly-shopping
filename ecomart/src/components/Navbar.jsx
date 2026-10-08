@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { ShoppingCart, Leaf, Star, BarChart2 } from "lucide-react";
 import { useApp } from "../context/AppContext";
+import { IS_CONTROL } from "../mode";
 
 export default function Navbar() {
   const { state, cartCount } = useApp();
@@ -10,7 +11,7 @@ export default function Navbar() {
     { to: "/", label: "Shop" },
     { to: "/cart", label: "Cart" },
     { to: "/dashboard", label: "Dashboard" },
-  ];
+  ].filter(l => !(IS_CONTROL && l.to === "/dashboard"));
 
   return (
     <header
@@ -52,7 +53,7 @@ export default function Navbar() {
         {/* Right controls */}
         <div className="flex items-center gap-3">
           {/* Green points pill */}
-          {state.greenPoints > 0 && (
+          {!IS_CONTROL && state.greenPoints > 0 && (
             <Link
               to="/dashboard"
               className="hidden sm:flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full no-underline"

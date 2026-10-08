@@ -14,7 +14,10 @@
   --muted: #6B7A6E;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* Reset placed in the base layer so Tailwind utility classes (padding, margins, mx-auto) are not overridden */
+@layer base {
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+}
 
 body {
   font-family: 'Inter', sans-serif;
